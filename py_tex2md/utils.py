@@ -1,5 +1,12 @@
 import re
 
+def escape(texstr):
+    pass
+
+def matchBrackets(str):
+    pass
+
+
 def readEnv(file, env):
     content = file.read(1)
     while not content.endswith('\\end{' + env + '}'):

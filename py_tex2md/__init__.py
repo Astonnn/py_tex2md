@@ -3,4 +3,4 @@
 
 
 from .tex2md import tex2md
-__all__ = ["tex2md", "picture"]
+__all__ = ["tex2md"]
