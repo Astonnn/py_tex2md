@@ -11,6 +11,7 @@ def matchBrackets(str, brackets):
     res = ()
     temp = ""
     flag = True
+    count = 0
     for i in str:
         if i == brackets[0]:
             flag = False
@@ -22,9 +23,9 @@ def matchBrackets(str, brackets):
             temp = ""
         else:
             temp += i
-            if i != str[len(str) - 1]:
-                continue
-        res = res + (temp,)
+        count += 1
+        if count == len(str):
+            res = res + (temp,)
     return res
 
 
