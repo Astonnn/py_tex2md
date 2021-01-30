@@ -1,10 +1,31 @@
 import re
 
+
 def escape(texstr):
     pass
 
-def matchBrackets(str):
-    pass
+
+def matchBrackets(str, brackets):
+    # 排除非法输入
+    # pass
+    res = ()
+    temp = ""
+    flag = True
+    for i in str:
+        if i == brackets[0]:
+            flag = False
+            res = res + (temp,)
+            temp = ""
+        elif not flag and i == brackets[1]:
+            flag = True
+            res = res + (temp,)
+            temp = ""
+        else:
+            temp += i
+            if i != str[len(str) - 1]:
+                continue
+        res = res + (temp,)
+    return res
 
 
 def readEnv(file, env):
@@ -17,6 +38,7 @@ def readEnv(file, env):
     print(re.sub(end, '', content))
     return re.sub(end, '', content)
 
+
 def readWord(file):
     letter = file.read(1)
     word = ''
@@ -25,6 +47,7 @@ def readWord(file):
         letter = file.read(1)
         print(word)
     return word
+
 
 def strreadfirst(str, s):
     if len(str) == 0:
@@ -39,6 +62,7 @@ def strreadfirst(str, s):
     prefix = prefix.replace(s, '')
     print('prefix', prefix)
     return prefix
+
 
 def strreadline(str):
     if len(str) == 0:
