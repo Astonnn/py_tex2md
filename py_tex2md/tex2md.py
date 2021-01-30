@@ -107,6 +107,7 @@ class tex2md(object):
                     mdstr += '</g>'
                     texstr = putmatch[3]
                 elif command == 'line':
+                    
                     pass
                 elif command == 'circle':
                     # print('circle', texstr)
