@@ -5,30 +5,6 @@ def escape(texstr):
     pass
 
 
-def matchBrackets(str, brackets):
-    # 排除非法输入
-    # pass
-    res = ()
-    temp = ""
-    flag = True
-    count = 0
-    for i in str:
-        if i == brackets[0]:
-            flag = False
-            res = res + (temp,)
-            temp = ""
-        elif not flag and i == brackets[1]:
-            flag = True
-            res = res + (temp,)
-            temp = ""
-        else:
-            temp += i
-        count += 1
-        if count == len(str):
-            res = res + (temp,)
-    return res
-
-
 def readEnv(file, env):
     content = file.read(1)
     while not content.endswith('\\end{' + env + '}'):
@@ -38,6 +14,52 @@ def readEnv(file, env):
     # print(end)
     print(re.sub(end, '', content))
     return re.sub(end, '', content)
+
+
+def matchBrackets(str, brackets):
+    # 排除非法输入
+    # pass
+    def pair(br):
+        if br == '(':
+            return ')'
+        elif br == '{':
+            return '}'
+        elif br == '[':
+            return ']'
+        else:
+            return ','
+
+    tu = tuple(brackets)
+    res = ()
+    flag = False  # False:正常；True:匹配状态
+    temp = ""
+    p = ''  # 记录被匹配的括号
+    i_s = 0
+    while i_s < len(str):  # i_s 是str中字符的下标
+        if flag:
+            while str[i_s] != p:
+                temp += str[i_s]
+                i_s += 1
+            res += temp,
+            temp = ""
+            flag = False
+            # i_s += 1
+        elif str[i_s] in tu and not flag:  #
+            flag = True
+            res += temp,
+            temp = ""
+            p = pair(str[i_s])
+            if p == ',':
+                flag = False
+            # i_s += 1
+            # continue
+        else:
+            temp += str[i_s]
+            # continue
+        if i_s == len(str) - 1:
+            res += temp,
+        i_s += 1
+    return res
 
 
 def readWord(file):
