@@ -15,28 +15,29 @@ def readEnv(file, env):
     print(re.sub(end, '', content))
     return re.sub(end, '', content)
 
-def readTitle(title):  # 处理多级标题 
-    tar = "" 
-    if re.match('.*section\{.*', title) is None: 
-        return title 
-    else: 
-        i = 0 
-        sec = "" 
-        tit = "" 
-        while title[i] != '{': 
-            tit += title[i] 
-            i += 1 
-        i += 1 
-        while title[i] != '}': 
-            sec += title[i] 
-            i += 1 
-        # print(sec) 
-        n = tit.count("sub") + 1 
-        if n > 6: 
-            return title 
-        print("<h" + str(n) + ">" + sec + "</h" + str(n) + ">") 
-        return "<h" + str(n) + ">" + sec + "</h" + str(n) + ">" 
-    # pass 
+
+def readTitle(title):  # 处理多级标题
+    tar = ""
+    if re.match('.*section\{.*', title) is None:
+        return title
+    else:
+        i = 0
+        sec = ""
+        tit = ""
+        while title[i] != '{':
+            tit += title[i]
+            i += 1
+        i += 1
+        while title[i] != '}':
+            sec += title[i]
+            i += 1
+        # print(sec)
+        n = tit.count("sub") + 1
+        if n > 6:
+            return title
+        print("<h" + str(n) + ">" + sec + "</h" + str(n) + ">")
+        return "<h" + str(n) + ">" + sec + "</h" + str(n) + ">"
+    # pass
 
 
 def matchBrackets(str, brackets):
@@ -127,6 +128,7 @@ def _matchBrackets(str, brackets):
             res += temp,
         i_s += 1
     return res
+
 
 def readWord(file):
     letter = file.read(1)
