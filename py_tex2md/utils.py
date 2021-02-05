@@ -48,6 +48,50 @@ def matchBrackets(str, brackets):
             return '}'
         elif br == '[':
             return ']'
+        if br == ')':
+            return '('
+        elif br == '}':
+            return '{'
+        elif br == ']':
+            return '['
+        else:
+            return br
+    res = []
+    beg = 0
+    # 截取子串begin
+    i_s = 0
+    # brackets index
+    count = 0
+    # 数数
+    for c in range(len(str)):
+        # print(i_s)
+        if str[c] == brackets[i_s]:
+            if count == 0:
+                # brackets匹配成功
+                i_s += 1
+                res.append(str[beg:c])
+                beg = c + 1
+                if i_s >= len(brackets):
+                    break
+            else:
+                count -= 1
+        elif str[c] == pair(brackets[i_s]):
+            count += 1
+    res.append(str[beg:len(str)])
+    # print(temp)
+    # temp += c
+    return tuple(res)
+
+def _matchBrackets(str, brackets):
+    # 排除非法输入
+    # pass
+    def pair(br):
+        if br == '(':
+            return ')'
+        elif br == '{':
+            return '}'
+        elif br == '[':
+            return ']'
         else:
             return ','
 
