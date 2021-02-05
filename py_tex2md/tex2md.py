@@ -40,6 +40,22 @@ class tex2md(object):
         mdstr = ''
         try:
             while len(texstr) > 0:
+                partition = texstr.partition('%')
+                while partition[1] != '':
+                    mdstr += tex2md.convert(partition[0])
+                    partition = partition[2].partition('\n')
+                    # html 注释
+                    mdstr += '<!--' + partition[0] + '-->\n'
+                    # ; 注释
+                    # mdstr += '\n;' + partition[0] + '\n'
+                    # : 注释
+                    # mdstr += '\n:' + partition[0] + '\n'
+                    # 解析法注释
+                    mdstr += '[comment]: <> (' + partition[0] + ')\n'
+                    mdstr += '[//]: # (' + partition[0] + ')\n'
+                    texstr = partition[2]
+                    partition = partition[2].partition('%')
+
                 partition = texstr.partition('\\')
                 # 无法解析注释% {}
                 print(partition)

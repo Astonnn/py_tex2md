@@ -7,6 +7,7 @@ def main():
     ttt = \
     '''
 %zxasdasd
+aa%zcccccc
 \\begin{picture}(80,10)
 \put(20,0){\circle{3}}
 \put(60,0){\circle*{3}}
