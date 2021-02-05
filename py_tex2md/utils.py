@@ -18,6 +18,7 @@ def readEnv(file, env):
 
 def handleTitle(title):  # 处理多级标题
     list = ["part", "chapter", "section", "subsection", "subsubsection", "paragraph", "subparagraph"]
+
     def readtitle(str):
         tit = ""
         j = 0
@@ -32,9 +33,14 @@ def handleTitle(title):  # 处理多级标题
         par = '\\\\' + list[i] + "\{.*\}"
         if re.match(par, title) is not None:
             if i == 0:
-                return "<h1 style=\"font-size: bigger;\">"+readtitle(title)+"</h1>"
+                return "<h1 style=\"font-size: bigger;\">" + readtitle(title) + "</h1>"
             else:
-                return "<h"+str(i)+">"+readtitle(title)+"</h"+str(i)+">"
+                res = ""
+                for j in range(i):
+                    res += '#'
+                # return "<h" + str(i) + ">" + readtitle(title) + "</h" + str(i) + ">"
+                res = res + " " + readtitle(title)
+                return res
     return title
 
 
@@ -56,6 +62,7 @@ def matchBrackets(str, brackets):
             return '['
         else:
             return br
+
     res = []
     beg = 0
     # 截取子串begin
@@ -81,6 +88,7 @@ def matchBrackets(str, brackets):
     # print(temp)
     # temp += c
     return tuple(res)
+
 
 def _matchBrackets(str, brackets):
     # 排除非法输入
