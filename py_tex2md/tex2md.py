@@ -2,6 +2,7 @@ from . import picture
 from . import utils
 
 import re
+import math
 
 
 def begin(tex, env):
@@ -12,7 +13,8 @@ def begin(tex, env):
     else:
         pass
 settings = {
-    'half_row_spacing': 15
+    'half_row_spacing': 15,
+    'line_height': 1
 }
 # def comment(mdstr, texstr):
 #     partition = texstr.partition('\n')
@@ -41,7 +43,15 @@ class tex2md(object):
                 partition = texstr.partition('\\')
                 # 无法解析注释% {}
                 print(partition)
-                mdstr += partition[0]
+                mdstr += partition[0].replace('{', '').replace('}', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '')
+                # commentmatch = re.match(r'([.\n]*)%(.*)\n([.\n]*)', temp)
+                # mdstr += commentmatch.group(1)
+                # print(111111111, commentmatch, temp)
+                # while commentmatch is not None:
+                #     mdstr += 
+                #     print(commentmatch)
+                #     temp = commentmatch.group(3)
+                #     commentmatch = re.match(r'([.\n]*)%(.*)\n([.\n]*)', temp)
                 cmdmatch = re.match(r'([a-zA-Z]+|[\(\)\{\}#$%&\\]|[_~^]\{\})(.*)', partition[2], re.S)
                 # print(type(cmdmatch))
                 print(cmdmatch)
@@ -69,15 +79,19 @@ class tex2md(object):
                         sizematch = re.match(r'[ ]*\([ ]*([\d\.]+)[ ]*,[ ]*([\d\.]+)', partition[0], re.S)
                         width = float(sizematch.group(1))
                         height = float(sizematch.group(2))
-                        mdstr += '<svg width="' + str(width) + '" height="' + str(height * 2 + settings['half_row_spacing']) + '">'
+                        mdstr += '<svg width="' + str(width) + '" height="' + str(height * 2 + settings['half_row_spacing']) + '"><g transform="translate(0 ' + str(height * 2) + ')">'
                         mdstr += tex2md.convert(partition[2])
-                        mdstr += '</svg>'
+                        mdstr += '</g></svg>'
                     elif env == 'document':
                         pass
                     elif env == 'equation':
                         mdstr += '$$\n' + partition[0] + '\n$$'
                     elif env == 'enumerate':
                         pass
+                        items = partition[0].split('\item')
+                        mdstr += tex2md.convert(items[0])
+                        for i in range(1, len(items)):
+                            mdstr += str(i) + '. ' + tex2md.convert(items[i])
                     else:
                         pass
                     print('132', env, texstr)
@@ -96,21 +110,36 @@ class tex2md(object):
                 elif command == 'textbackslash':
                     mdstr += '\\'
                 elif command == 'put' or command == 'makebox':
+                    print('putmakebox', texstr)
                     # matchBrackets
                     putmatch = utils.matchBrackets(texstr, '(){}')
+                    print('putmatch', putmatch)
                     # putmatch = re.match(r'\(([\d\.]+),([\d\.]+)\)(.*)', texstr, re.S)
+                    # mdstr += putmatch[0]
                     partition = putmatch[1].partition(',')
                     dx = float(partition[0])
-                    dy = float(partition[2])
+                    dy = -float(partition[2])
                     mdstr += '<g transform="translate(' + str(dx) + ' ' + str(dy) + ')">'
-                    mdstr += tex2md.convert(putmatch[2])
+                    if putmatch[3].find('\\') == -1:
+                        mdstr += '<text>' + tex2md.convert(putmatch[3]) + '</text>'
+                    else:
+                        mdstr += tex2md.convert(putmatch[3])
                     mdstr += '</g>'
-                    texstr = putmatch[3]
+                    texstr = putmatch[4]
                 elif command == 'line':
-                    
-                    pass
+                    print('lineline', texstr)
+                    linematch = utils.matchBrackets(texstr, '(){}')
+                    # linematch = re.match(r'\(([\d\.]+),([\d\.]+)\)(.*)', texstr, re.S)
+                    partition = linematch[1].partition(',')
+                    dx = float(partition[0])
+                    dy = -float(partition[2])
+                    theta = math.atan2(dy, dx) * 180 / math.pi
+                    times = float(linematch[3])
+                    length = math.sqrt(dx * dx + dy * dy) * times
+                    mdstr += '<rect width="' + str(length) + '" height="' + str(settings['line_height']) + '" transform="rotate(' + str(theta) + ' 0,0)"/>'
+                    texstr = linematch[4]
                 elif command == 'circle':
-                    # print('circle', texstr)
+                    print('circlecircle', texstr)
                     circlematch = re.match(r'\*?\{([\d\.]+)\}(.*)', texstr, re.S)
                     radius = float(circlematch.group(1))
                     mdstr += '<circle r="' + str(radius) + '"'
