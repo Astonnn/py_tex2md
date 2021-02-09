@@ -163,6 +163,8 @@ class tex2md(object):
                         mdstr += ' stroke="currentColor" fill="none"'
                     mdstr += '/>'
                     texstr = circlematch.group(2)
+                elif command == 'tableofcontents':
+                    mdstr += '\n[TOC]\n'
                 else:
                     pass
                     # texstr = partition[2]
