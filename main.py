@@ -4,8 +4,8 @@ from py_tex2md import *
 def main():
     print("__name__ :", __name__)
     # tex2md.tex2md('test.tex', 'test.md')
-    ttt = \
-    '''
+    ttt = '''
+\\tableofcontents{}
 %zxasdasd
 aa%zcccccc
 \\begin{picture}(80,10)
@@ -16,7 +16,8 @@ aa%zcccccc
 \put(20,8){\makebox(0,0){O}}
 \put(60,8){\makebox(0,0){A}}
 \end{picture}
-    '''
+\part{part}\chapter{chapter}
+'''
     print('!!!!!\n', tex2md.convert(ttt))
     # print('!!!!!!!!!!!!!!!!!!!!\n', tex2md.convert('$A$'))
     pass

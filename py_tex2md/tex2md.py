@@ -57,7 +57,6 @@ class tex2md(object):
                     partition = partition[2].partition('%')
 
                 partition = texstr.partition('\\')
-                # 无法解析注释% {}
                 print(partition)
                 mdstr += partition[0].replace('{', '').replace('}', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '')
                 # commentmatch = re.match(r'([.\n]*)%(.*)\n([.\n]*)', temp)
@@ -165,6 +164,11 @@ class tex2md(object):
                     texstr = circlematch.group(2)
                 elif command == 'tableofcontents':
                     mdstr += '\n[TOC]\n'
+                elif command in ["part", "chapter", "section", "subsection", "subsubsection", "paragraph", "subparagraph"]:
+                    match = utils.matchBrackets(texstr, '{}')
+                    print(match)
+                    mdstr += '\n' + utils.handleTitle('\\' + command + '{' + match[1] + '}')
+                    texstr = match[2]
                 else:
                     pass
                     # texstr = partition[2]
